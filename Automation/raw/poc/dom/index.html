@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+</head>
+<body>
+    
+  <input type ="text" >
+  <i class="fas fa-plus-circle"></i>
+  <h2> List of tags</h2>
+  <ul></ul>
+
+
+<script>
+    let adButton = document.querySelector('i');// find icon tag
+    
+    adButton.addEventListener('click', function() // whenever we click it calls callback
+    {
+          let inputEle = document.querySelector('input'); // input tag select
+          let inptext = inputEle.value// get its text 
+          //console.log(inptext)
+          let liElement = document.createElement('li'); // create a list item
+          liElement.innerText =inptext // add the text inside it 
+          let ulElement = document.querySelector('ul'); // find ul tag from outside 
+          ulElement.appendChild(liElement) // append the li item 
+          inputEle.value ="" // make the input text value to  empty string
+
+
+
+
+    }
+    )    
+ 
+
+      
+</script>
+      
+
+</body>
+</html>
