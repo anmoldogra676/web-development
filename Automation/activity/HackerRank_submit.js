@@ -81,7 +81,7 @@ browserOpenPromise
     }).catch(function(err){
 console.log(err);
     })
-    
+
 // create 
 function waitAndClick(selector) {
     // wait +click-> promise
