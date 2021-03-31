@@ -4,7 +4,9 @@
 
 
 const puppeteer = require("puppeteer");
-let cTab
+let { answers } = require("./code");
+
+let cTab;
 let browserOpenPromise = puppeteer.launch({
     headless: false,
     defaultViewport: null,
@@ -20,7 +22,8 @@ browserOpenPromise
         return visitLoginpagePromise;
     }).then(function () {
         // console.log(visitPage)
-        let emailWillTypedpromise = cTab.type("input[name='username']", "nebol91342@bsmitao.com", { delay: 200 });
+        let emailWillTypedpromise = cTab.type("input[name='username']", 
+        "nebol91342@bsmitao.com", { delay: 200 });
         return emailWillTypedpromise;
     }).then(function () {
         let passwordWillTypedpromise = cTab.type("input[name='password']", "123456789", { delay: 200 });
@@ -70,11 +73,15 @@ browserOpenPromise
         //link -> of all questions
         // serially question -> question solver -> question solve
     }).then(function (linksArr) {
-        console.log(linksArr);
+        // console.log(linksArr);
+        let questionWillBeSolvedPromise = questionSolver(linksArr[0], 0);
+        return questionWillBeSolvedPromise;
+    }).then(function () {
+        console.log("Question printed code is moved to clipboard");
+    }).catch(function(err){
+console.log(err);
     })
-
-
-
+    
 // create 
 function waitAndClick(selector) {
     // wait +click-> promise
@@ -84,7 +91,7 @@ function waitAndClick(selector) {
         waitForElementPromise
             .then(function () {
                 let clickPromise = cTab.click(selector);
-                return clickPromise
+                return clickPromise;
             }).then(function () {
                 resolve();
             }).catch(function (err) {
@@ -93,6 +100,56 @@ function waitAndClick(selector) {
 
     })
 }
-    // dynamic site -> id change
-
-    // create new promise -> wait ->
+function questionSolver(url, idx) {
+    return new Promise(function (resolve, reject) {
+        // go to page
+        let fullLink = `https://www.hackerrank.com${url}`;
+        let goToQuestionPagePromise = cTab
+            .goto(fullLink);
+        goToQuestionPagePromise
+            .then(function () {
+                let waitForCheckBoxAndClick = waitAndClick(".custom-input-checkbox");
+                return waitForCheckBoxAndClick;
+                // input box wait and click
+            }).then(function () {
+                let waitForTextBox = cTab.waitForSelector(".custominput", { visible: true });
+                return waitForTextBox;
+                // text box data input 
+            }).then(function () {
+                let codeWillBeAddedPromise = cTab.type(".custominput", answers[0], { delay: 10 });
+                return codeWillBeAddedPromise;
+            }).then(function () {
+                let ctrWillBeDownPromise = cTab.keyboard.down("Control");
+                return ctrWillBeDownPromise;
+            }).then(function () {
+                let aWillBepressedPromise = cTab.keyboard.press("a");
+                return aWillBepressedPromise;
+            }).then(function () {
+                let xWillBepressedPromise = cTab.keyboard.press("x");
+                return xWillBepressedPromise;
+            }).then(function () {
+                let pointerWillBeclicked = cTab.click(".monaco-editor.no-user-select.vs");
+                return pointerWillBeclicked;
+            }).then(function () {
+                let awillBePressedOnpinter = cTab.keyboard.press("a");
+                return awillBePressedOnpinter;
+            }).then(function () {
+                let codePastePromise = cTab.keyboard.press("v");
+                return codePastePromise;
+            }).then(function () {
+                let submitWillClickedPromise = cTab.click(".pull-right.btn.btn-primary.hr-monaco-submit");
+                return submitWillClickedPromise;
+            })
+            // ctrl A
+            // ctrl X
+            // Code editor code paste-> 
+            .then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            })
+        // selector wait 
+        //  code paste 
+        // submit
+    })
+}
