@@ -83,23 +83,7 @@ console.log(err);
     })
 
 // create 
-function waitAndClick(selector) {
-    // wait +click-> promise
-    return new Promise(function (resolve, reject) {
-        // P1
-        let waitForElementPromise = cTab.waitForSelector(selector, { visible: true });
-        waitForElementPromise
-            .then(function () {
-                let clickPromise = cTab.click(selector);
-                return clickPromise;
-            }).then(function () {
-                resolve();
-            }).catch(function (err) {
-                reject(err);
-            })
 
-    })
-}
 function questionSolver(url, idx) {
     return new Promise(function (resolve, reject) {
         // go to page
@@ -153,3 +137,24 @@ function questionSolver(url, idx) {
         // submit
     })
 }
+
+
+
+function waitAndClick(selector) {
+    // wait +click-> promise
+    return new Promise(function (resolve, reject) {
+        // P1
+        let waitForElementPromise = cTab.waitForSelector(selector, { visible: true });
+        waitForElementPromise
+            .then(function () {
+                let clickPromise = cTab.click(selector);
+                return clickPromise;
+            }).then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            })
+
+    })
+}
+
