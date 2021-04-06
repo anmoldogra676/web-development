@@ -102,7 +102,8 @@ function questionSolver(url, idx) {
             }).then(function () {
                 let codeWillBeAddedPromise = cTab.type(".custominput", answers[0], { delay: 10 });
                 return codeWillBeAddedPromise;
-            }).then(function () {
+            })
+            .then(function () {
                 let ctrWillBeDownPromise = cTab.keyboard.down("Control");
                 return ctrWillBeDownPromise;
             }).then(function () {
