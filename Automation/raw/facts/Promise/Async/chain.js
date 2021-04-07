@@ -9,7 +9,8 @@ function scb(data) {
 }
 thenKaPromise.then(
 function (data) {
-console.log("data"+data);
+console.log("data--> "+data); // data -> return value of scb which is promise object so promise object.then means 
+// uska  data so promise object is f2p hence f2p ka data so it waits until f2p gets resolved or rejected
 
 })
 
