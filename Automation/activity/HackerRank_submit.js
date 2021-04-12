@@ -74,36 +74,61 @@ browserOpenPromise
         // serially question -> question solver -> question solve
     }).then(function (linksArr) {
         // console.log(linksArr);
+        // bugs code -> 
         let questionWillBeSolvedPromise = questionSolver(linksArr[0], 0);
+        // loop chaining 
+        for (let i = 1; i < linksArr.length; i++) {
+            questionWillBeSolvedPromise = questionWillBeSolvedPromise
+                .then(function () {
+                    return questionSolver(linksArr[i], i);
+                })
+        }
         return questionWillBeSolvedPromise;
     }).then(function () {
         console.log("Question printed code is moved to clipboard");
-    }).catch(function(err){
-console.log(err);
+    }).catch(function (err) {
+        console.log(err);
     })
-
 // create 
+function waitAndClick(selector) {
+    // wait +click-> promise
+    return new Promise(function (resolve, reject) {
+        // P1
+        let waitForElementPromise = cTab.waitForSelector(selector, { visible: true });
+        waitForElementPromise
+            .then(function () {
+                let clickPromise = cTab.click(selector);
+                return clickPromise;
+            }).then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            })
 
+    })
+}
 function questionSolver(url, idx) {
     return new Promise(function (resolve, reject) {
         // go to page
         let fullLink = `https://www.hackerrank.com${url}`;
-        let goToQuestionPagePromise = cTab
-            .goto(fullLink);
+        let goToQuestionPagePromise = cTab.goto(fullLink);
         goToQuestionPagePromise
             .then(function () {
-                let waitForCheckBoxAndClick = waitAndClick(".custom-input-checkbox");
+                console.log(1);
+                let waitForCheckBoxAndClick = waitAndClick(".checkbox-input");
                 return waitForCheckBoxAndClick;
                 // input box wait and click
             }).then(function () {
+                console.log(2);
                 let waitForTextBox = cTab.waitForSelector(".custominput", { visible: true });
                 return waitForTextBox;
                 // text box data input 
             }).then(function () {
-                let codeWillBeAddedPromise = cTab.type(".custominput", answers[0], { delay: 10 });
+                console.log(3);
+                let codeWillBeAddedPromise = cTab.type(".custominput", answers[idx], { delay: 10 });
                 return codeWillBeAddedPromise;
-            })
-            .then(function () {
+            }).then(function () {
+                console.log(4);
                 let ctrWillBeDownPromise = cTab.keyboard.down("Control");
                 return ctrWillBeDownPromise;
             }).then(function () {
@@ -122,8 +147,11 @@ function questionSolver(url, idx) {
                 let codePastePromise = cTab.keyboard.press("v");
                 return codePastePromise;
             }).then(function () {
-                let submitWillClickedPromise = cTab.click(".pull-right.btn.btn-primary.hr-monaco-submit");
+                let submitWillClickedPromise = cTab.click(".hr-monaco-submit");
                 return submitWillClickedPromise;
+            }).then(function () {
+                let ctrWillBeDownPromise = cTab.keyboard.up("Control");
+                return ctrWillBeDownPromise;
             })
             // ctrl A
             // ctrl X
@@ -138,24 +166,6 @@ function questionSolver(url, idx) {
         // submit
     })
 }
+    // dynamic site -> id change
 
-
-
-function waitAndClick(selector) {
-    // wait +click-> promise
-    return new Promise(function (resolve, reject) {
-        // P1
-        let waitForElementPromise = cTab.waitForSelector(selector, { visible: true });
-        waitForElementPromise
-            .then(function () {
-                let clickPromise = cTab.click(selector);
-                return clickPromise;
-            }).then(function () {
-                resolve();
-            }).catch(function (err) {
-                reject(err);
-            })
-
-    })
-}
-
+    // create new promise -> wait ->

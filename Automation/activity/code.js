@@ -104,10 +104,11 @@ module.exports = {
                 if(A[i] == 0) dp[i] = min(dp[i-1], dp[i-2]) + 1;
                 else dp[i] = inf;
             }
-            cout << dp[n] << "\n";
+            cout << dp[n] << '\n';
             return 0;
         }`,
         `#include <bits/stdc++.h>
+
         using namespace std;
         
         typedef long long ll;
