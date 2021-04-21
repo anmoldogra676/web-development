@@ -16,9 +16,7 @@ console.log(`
               2. Topic Wise 
            `);
 
-
-
-  readline.question(" Enter 1 or 2 \n", choice=> {
+  readline.question(" Enter 1 or 2 \n", async choice=> {
     //console.log(` ${choice}`)
     if(choice==1){
         //full
@@ -27,8 +25,9 @@ console.log(`
     }else if(choice==2){
         // topic Wise
         // readline.question(" Enter 1 or 2 \n", choice=> {})
-    // const topic = (async function ansss(){await getTopic("Enter Topic Name: ")})();
-    // TopicLisT(topic);
+    const topic = await getTopic("Enter Topic Name: ");
+    TopicLisT(topic);
+    
 
     }else{
         console.log(" Enter Correct Choice")
@@ -62,7 +61,6 @@ async function fullLisT(topic) {
     }
 }
 
-
 async function TopicLisT(topic) {
     try {
         let browserOpenPromise = puppeteer.launch({
@@ -70,14 +68,12 @@ async function TopicLisT(topic) {
             defaultViewport: null,
             args: ["--start-maximized"]
         });
-        
-          
-          
+ 
         let browser = await browserOpenPromise;
         let allTabsArr = await browser.pages();
         cTab = allTabsArr[0];
         let fullList = await getTopicListingFromLeetcode(link, topic);
-        // console.table(fullList)
+        console.table(fullList)
 
 
     } catch (err) {
@@ -85,8 +81,7 @@ async function TopicLisT(topic) {
         console.log(err);
     }
 }
-
-
+                                   
 async function getTopicListingFromLeetcode(link, topic) {
     await cTab.goto(link)
     await cTab.waitForSelector(".nav-right> .nav-menu a", { visible: true });
@@ -102,7 +97,7 @@ async function getTopicListingFromLeetcode(link, topic) {
     await cTab.waitForSelector(".fa.fa-caret-down", { visible: true }); // click on tag
     await cTab.click(".fa.fa-caret-down ",{ visible: true })
     await cTab.waitForSelector(".filterSearch.form-control", { visible: true });// type name
-    await cTab.type(".filterSearch.form-control", name, { delay: 500 })
+    await cTab.type(".filterSearch.form-control", topic , { delay: 500 })
     await cTab.waitForSelector(".false.tag-category.filter-dropdown-menu-items .filter-dropdown-menu-item", { visible: true });// click on topic
     await cTab.click(".false.tag-category.filter-dropdown-menu-items .filter-dropdown-menu-item",{ visible: true })
     // get topic list
@@ -119,8 +114,7 @@ async function getTopicListingFromLeetcode(link, topic) {
 
 
 }
-
-
+                                                                
 async function getFullListingFromLeetcode(link, topic) {
     await cTab.goto(link)
     await cTab.waitForSelector(".nav-right> .nav-menu a", { visible: true });
@@ -136,14 +130,13 @@ async function getFullListingFromLeetcode(link, topic) {
      ProblemFn.helperFn(cTab, topic)
 
 }
-
+                       
 function returnRequiredLink(selector1, idx){
     let login = document.querySelectorAll(selector1)[idx].getAttribute("href");
     let fullLoginLink ="https://leetcode.com"+login;
     return fullLoginLink
 }
-
- 
+                     
 function getTopic(query) {
     
         return new Promise(resolve => readline.question(query, ans => {
@@ -151,11 +144,7 @@ function getTopic(query) {
             resolve(ans);
         }))
     }
-    
-   
-
-
-module.exports={
-    cTab
-    
+                    
+module.exports= {
+    cTab  
 }
