@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-let { answers } = require("./codes");
+let { answers } = require("./code");
 let cTab;
 (async function fn() {
     try {
