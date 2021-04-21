@@ -1,22 +1,21 @@
 
-// let link ="https://leetcode.com/problemset/all/ "
 const puppeteer = require("puppeteer");
 const PDFDocument = require("pdfkit");
 let fs = require('fs');
 
-// we are at Problem Set 
-async function fn1(cTab, topic) {
+// currently we are at Problem Set 
+async function fn1(cTab, topic, level) {
     try {
     await cTab.waitForSelector(".row-selector>.form-control ", { visible: true });
     await cTab.click(".row-selector>.form-control ",{ visible: true })
-    // main site
+    // Promblem set Page 
     await cTab.keyboard.press('ArrowDown');
     await cTab.keyboard.press('ArrowDown');
     await cTab.keyboard.press('Enter');
-    //select all 
+    //select all the questions 
     let fullLs =await cTab.evaluate(consoleFn,".reactable-data tr td[label ='Title'] a[href]" , ".reactable-data tr td[label ='Difficulty'] .label");// data
-    // console.log(fullLs)
-    pdfMaker(fullLs, topic)
+    // return the data in form of an array 
+    pdfMaker(fullLs, topic, level)
     
 
 } catch (err) {
@@ -26,13 +25,13 @@ async function fn1(cTab, topic) {
 }
 
 // just to call  fn1 function
-function helperFn(cTab, topic)
+function helperFn(cTab, topic, level)
 {
-    fn1(cTab, topic);
+    fn1(cTab, topic, level);
 }
 
 
-function consoleFn(selector1, selector2) {  // get the question name and question Link
+function consoleFn(selector1, selector2) {  // get the question name and question Link in an array 
     let length1 = document.querySelectorAll(selector1).length;
     let names = document.querySelectorAll(selector1);
     let qlInk = document.querySelectorAll(selector1);
@@ -55,8 +54,8 @@ function consoleFn(selector1, selector2) {  // get the question name and questio
 }
 
 
-// Makes a pdf through Data
-function pdfMaker(listData, topic){
+// Makes a pdf through given Data
+function pdfMaker(listData, topic, level){
     let pdfDoc = new PDFDocument({
         size: "A4",
         margin: 40,
@@ -67,7 +66,9 @@ function pdfMaker(listData, topic){
       generateDoc(pdfDoc, listData);
       
       pdfDoc.end();
-
+      if(level!=undefined){
+        topic =topic+level;
+      }
       pdfDoc.pipe(fs.createWriteStream(`./${topic}.pdf`));
       function generateDoc(doc, arr) {
         const chunkSize = 24;
