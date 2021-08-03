@@ -27,7 +27,7 @@ let f2 =x=>{
 // kyunki fxn ko hm variable m store kr r toh variable flow  m undefined jaata 
 // bki normal fxn k case m pura fxn jaata toh woh chl pdega aur arrow fxn nhi chlega woh undefined dega
 
-let f3=x=>x*2; 
+let f3=x=>x*2;  
 console.log(f3(2))
 let f4=(x,y)=>x*2*y; 
 console.log(f4(4,3))
